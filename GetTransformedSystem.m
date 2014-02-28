@@ -13,7 +13,7 @@ function [An, Bn] = GetTransformedSystem( t1, t2, t3, A, B )
 % @returns An {matrix, 3x3} TAT^-1
 % @returns Bn {matrix, 3x2} TB
 
-T = [1 0 0 ; 0 1 0 ; a1 a2 a3];
+T = [1 0 0 ; 0 1 0 ; t1 t2 t3];
 An = T * A * T^-1;
 Bn = T * B;
 end
