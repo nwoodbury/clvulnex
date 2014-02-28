@@ -1,8 +1,8 @@
+function [Q,P] = checkQP(A,B,C)
 % Given a state space system represented by (A, B, C), returns the 
 % Dynamical Structure Function (DSF) representation of the system.
 %
 % @author Vasu Chetty
-function [Q,P] = checkQP(A,B,C)
 [p,~] = size(C);
 [n,~] = size(A);
 [h,m] = size(B);
