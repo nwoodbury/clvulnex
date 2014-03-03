@@ -68,7 +68,6 @@ minvkloc = [-Inf, -Inf];     % Controller
 if showprogress
     fprintf('Beginning Exploration\n');
 end
-
 for x = 1 : dimeval
     for y = 1 : dimeval
         % Determine which are decision and which are not
@@ -90,10 +89,10 @@ for x = 1 : dimeval
             t3 = Y(x, y);
             xaxislabel = 't2';
             yaxislabel = 't3';
-        end
+        end       
         
         % Compute and store the minimum vulnerability found
-        [Vc, Vk] = VulnerabilityOfT(t1, t2, t3);
+        [Vk, Vc] = VulnerabilityOfT([t1, t2, t3]);
         Zc(x, y) = Vc;
         Zk(x, y) = Vk;
         
@@ -118,24 +117,24 @@ Zc(Zc > clip) = clip;
 Zk(Zk > clip) = clip;
 
 % Plot the results
-figure();
-subplot(2,2,1);
-surf(X,Y,Zc);
-xlabel(xaxislabel);
-ylabel(yaxislabel);
-zlabel('Vulnerability');
-title('Vulnerability of Combined System');
-zlim([0 clip]);
-shading interp
+%figure();
+%subplot(1,2,1);
+%surf(X,Y,Zc);
+%xlabel(xaxislabel);
+%ylabel(yaxislabel);
+%zlabel('Vulnerability');
+%title('Vulnerability of Combined System');
+%zlim([0 clip]);
+%shading interp
 
-subplot(2,2,2);
-contour(X, Y, Zc);
-xlabel(xaxislabel);
-ylabel(yaxislabel);
-title('Vulnerability of Combined System (contour)');
-shading interp
+%subplot(1,2,2);
+%contour(X, Y, Zc);
+%xlabel(xaxislabel);
+%ylabel(yaxislabel);
+%title('Vulnerability of Combined System (contour)');
+%shading interp
 
-subplot(2,2,3);
+subplot(1,2,1);
 surf(X,Y,Zk);
 xlabel(xaxislabel);
 ylabel(yaxislabel);
@@ -144,7 +143,7 @@ title('Vulnerability of the Controller');
 zlim([0 clip]);
 shading interp
 
-subplot(2,2,4);
+subplot(1,2,2);
 contour(X, Y, Zk);
 title('Vulnerability of the Controller (contour)');
 xlabel(xaxislabel);
