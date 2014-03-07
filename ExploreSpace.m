@@ -1,5 +1,5 @@
 function ExploreSpace(toexplore, constant, bound, numsteps, clip, ...
-                      showprogress)
+                      showprogress, vulnp)
 % Explores the space of vulnerabilities, producing contour and mesh
 % graphs of the result.
 %
@@ -21,6 +21,8 @@ function ExploreSpace(toexplore, constant, bound, numsteps, clip, ...
 % @param showprogress {boolean} (default true). If true, prints out 
 %   progress reports as a percentage completed. Each incremental percentage
 %   shown will be 100 / (numsteps + 1).
+% @param vulnp {boolean} (default false). If true, plots also the
+%   vulnerability of the plant.
 %
 % @author Nathan Woodbury
 
@@ -47,6 +49,9 @@ end
 if nargin < 6
     showprogress = true;
 end
+if nargin < 7
+    vulnp = false;
+end
 
 % Build the ranges and the space being explored
 rng = (0 : numsteps) * (2*bound)/numsteps - bound;
@@ -57,6 +62,8 @@ dimeval = numsteps + 1;
 Zc = zeros(dimeval); 
 % For storing max vulnerability seen in the controller
 Zk = zeros(dimeval);
+% For storing max vulnerability seen in the plant
+Zp = zeros(dimeval);
 
 % Create placeholders to track the value and location of the minimum
 % vulnerability
@@ -92,9 +99,10 @@ for x = 1 : dimeval
         end       
         
         % Compute and store the minimum vulnerability found
-        [Vk, Vc] = VulnerabilityOfT([t1, t2, t3]);
+        [Vk, Vc, Vp] = VulnerabilityOfT([t1, t2, t3]);
         Zc(x, y) = Vc;
         Zk(x, y) = Vk;
+        Zp(x, y) = Vp;
         
         % Update the traked location where the minum was found
         if Vc < minvc
@@ -115,6 +123,7 @@ end
 % Clip the vulnerabilities
 Zc(Zc > clip) = clip;
 Zk(Zk > clip) = clip;
+Zp(Zp > clip) = clip;
 
 % Plot the results
 %figure();
@@ -134,7 +143,13 @@ Zk(Zk > clip) = clip;
 %title('Vulnerability of Combined System (contour)');
 %shading interp
 
-subplot(1,2,1);
+if vulnp
+    rows = 2;
+else
+    rows = 1;
+end
+
+subplot(rows,2,1);
 surf(X,Y,Zk);
 xlabel(xaxislabel);
 ylabel(yaxislabel);
@@ -143,9 +158,25 @@ title('Vulnerability of the Controller');
 zlim([0 clip]);
 shading interp
 
-subplot(1,2,2);
+subplot(rows,2,2);
 contour(X, Y, Zk);
 title('Vulnerability of the Controller (contour)');
+xlabel(xaxislabel);
+ylabel(yaxislabel);
+shading interp
+
+subplot(rows,2,3);
+surf(X,Y,Zp);
+xlabel(xaxislabel);
+ylabel(yaxislabel);
+zlabel('Vulnerability');
+title('Vulnerability of the Plant');
+zlim([0 clip]);
+shading interp
+
+subplot(rows,2,4);
+contour(X, Y, Zp);
+title('Vulnerability of the Plant (contour)');
 xlabel(xaxislabel);
 ylabel(yaxislabel);
 shading interp
@@ -167,7 +198,7 @@ mkdir(dir);
 figname = sprintf('%s/space.fig', dir);
 resultsname = sprintf('%s/results.mat', dir);
 saveas(gcf, figname);
-save(resultsname, 'Zc', 'Zk', 'minvc', 'minvk', 'minvcloc', 'minvkloc');
+save(resultsname, 'Zc', 'Zk', 'Zp', 'minvc', 'minvk', 'minvcloc', 'minvkloc');
 fprintf('Figure saved to %s; results saved to %s\n', figname, resultsname);
 
 end
