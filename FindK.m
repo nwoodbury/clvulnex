@@ -1,5 +1,5 @@
 % A random script for finding a (clean) controller which stabilizes the
-% plant. This is used in formulating the problem.
+% plant in the ME575 example. This is used in formulating the problem.
 %
 % @author Nathan Woodbury
 
