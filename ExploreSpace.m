@@ -9,9 +9,9 @@ function ExploreSpace(toexplore, constant, bound, numsteps, clip, ...
 %   23: Holds t1 constant and explores t2 and t3
 % @param constant {int} (default = 1 if toexplore is 12, 0 otherwise).
 %   Sets the value of the ti that is held constant.
-% @param minrange {int} (default 50). The two ti's that are being explored
+% @param bound {int} (default 50). The two ti's that are being explored
 %   will be allowed to range between -bound and bound.
-% @param numstaps {int} (default 10). Each ti being explored will evaluate
+% @param numsteps {int} (default 10). Each ti being explored will evaluate
 %   vulnerability at (numsteps+1) steps between -bound and bound, including
 %   the points at -bound, bound, and 0. To have clean evaluation points,
 %   (2*bound)/numsteps should be a rational number. The total number
