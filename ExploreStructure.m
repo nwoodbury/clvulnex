@@ -99,7 +99,7 @@ for x = 1 : dimeval
             t3 = Y(x, y);
             xaxislabel = 't2';
             yaxislabel = 't3';
-        end   
+        end  
         
         % Check infeasibility
         if t3 == 0
